@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pelaporan Peserta Sekolah Rujukan Google</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#020617',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body id="pageBody" class="bg-slate-900 text-slate-100 min-h-screen py-6 sm:py-10 px-3 sm:px-6 transition-colors duration-300">
+    <div class="max-w-6xl mx-auto space-y-6">
+        
+        <!-- FITUR PEMILIH TEMA WARNA -->
+        <div class="flex justify-end items-center space-x-2 bg-slate-800/50 p-2 rounded-xl border border-slate-700/50 backdrop-blur w-fit ml-auto">
+            <span class="text-xs font-semibold text-slate-400 px-2">Tema:</span>
+            <button onclick="setTheme('navy')" title="Biru Navy" class="w-6 h-6 rounded-full bg-slate-900 border-2 border-blue-500 transition hover:scale-110"></button>
+            <button onclick="setTheme('emerald')" title="Emerald Hijau" class="w-6 h-6 rounded-full bg-zinc-900 border-2 border-emerald-500 transition hover:scale-110"></button>
+            <button onclick="setTheme('sunset')" title="Sunset Ungu" class="w-6 h-6 rounded-full bg-stone-900 border-2 border-purple-500 transition hover:scale-110"></button>
+            <button onclick="setTheme('light')" title="Mode Terang" class="w-6 h-6 rounded-full bg-slate-100 border-2 border-slate-400 transition hover:scale-110"></button>
+        </div>
+
+        <!-- HEADER / JUDUL UTAMA DENGAN LOGO KABUPATEN DONGGALA -->
+        <div class="text-center space-y-3">
+            <div class="flex justify-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Lambang_Kabupaten_Donggala_%282015-sekarang%29.png" 
+                     alt="Lambang Kabupaten Donggala" 
+                     class="h-20 sm:h-24 w-auto object-contain drop-shadow-md">
+            </div>
+            <p class="text-sm text-slate-400">DINAS PENDIDIKAN PEMUDA DAN OLAHRAGA</p>
+            <p class="text-sm text-slate-400">KABUPATEN DONGGALA</p>
+            <span id="badgeTheme" class="bg-blue-900/60 text-blue-300 border border-blue-700/50 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider inline-block">Kandidat Sekolah Rujukan Google (KSRG)</span>
+            <h1 id="titleText" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Dokumentasi Kegiatan KSRG 2026</h1>
+            <p class="text-sm text-slate-400">Jenjang SMP Kabupaten Donggala.</p>
+        </div>
+
+        <!-- NAVIGASI TAB HTML (RESPONSIF) -->
+        <div id="navContainer" class="flex justify-center border-b border-slate-800 overflow-x-auto">
+            <button onclick="switchTab('form')" id="tabFormBtn" 
+                class="py-3 px-4 sm:px-6 font-semibold text-sm border-b-2 border-blue-500 text-blue-400 transition flex items-center space-x-2 whitespace-nowrap">
+                <span>📝 Form Pelaporan</span>
+            </button>
+            <button onclick="switchTab('daftar')" id="tabDaftarBtn" 
+                class="py-3 px-4 sm:px-6 font-semibold text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition flex items-center space-x-2 whitespace-nowrap">
+                <span>📊 Daftar Hasil Pelaporan</span>
+            </button>
+        </div>
+
+        <!-- KONTEN TAB 1: FORM PELAPORAN -->
+        <div id="tabFormContent" class="card-theme bg-slate-900 rounded-2xl shadow-2xl p-5 sm:p-8 border border-slate-800 transition-colors duration-300">
+            <div class="mb-6">
+                <h2 class="text-xl font-bold text-white title-dyn">Form Isian Pelaporan</h2>
+                <p class="text-sm text-slate-400">Lengkapi data diri, asal sekolah, pesan & kesan, rencana tindak lanjut, serta dokumen pelaporan.</p>
+            </div>
+
+            <form id="reportForm" onsubmit="handleSubmit(event)" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Nama Lengkap -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Nama Lengkap</label>
+                        <input type="text" id="nama" required placeholder="Contoh: Budi Santoso, S.Pd." 
+                            class="input-theme w-full px-4 py-3 rounded-lg bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
+                    </div>
+
+                    <!-- Asal Sekolah -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Asal Sekolah</label>
+                        <input type="text" id="asalSekolah" required placeholder="Contoh: SMPN 1 Donggala" 
+                            class="input-theme w-full px-4 py-3 rounded-lg bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Pesan & Kesan -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Pesan & Kesan Pelatihan</label>
+                        <textarea id="pesanKesan" rows="3" required placeholder="Tuliskan kesan dan pesan selama mengikuti pelatihan..."
+                            class="input-theme w-full px-4 py-3 rounded-lg bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"></textarea>
+                    </div>
+
+                    <!-- Tindak Lanjut -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Rencana Tindak Lanjut (RTL)</label>
+                        <textarea id="tindakLanjut" rows="3" required placeholder="Tuliskan rencana implementasi atau tindak lanjut di sekolah..."
+                            class="input-theme w-full px-4 py-3 rounded-lg bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"></textarea>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Foto Profil -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Foto Profil</label>
+                        <input type="file" id="fotoProfilFile" accept="image/*" required
+                            class="input-theme w-full text-xs text-slate-400 file:mr-2 file:py-2 file:px-3 file:rounded-lg file:border-0 file:font-semibold file:bg-blue-950 file:text-blue-300 hover:file:bg-blue-900 cursor:pointer border border-slate-800 bg-slate-950 rounded-lg">
+                    </div>
+
+                    <!-- Foto Kegiatan -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Foto Kegiatan</label>
+                        <input type="file" id="fotoKegiatanFile" accept="image/*" required
+                            class="input-theme w-full text-xs text-slate-400 file:mr-2 file:py-2 file:px-3 file:rounded-lg file:border-0 file:font-semibold file:bg-blue-950 file:text-blue-300 hover:file:bg-blue-900 cursor:pointer border border-slate-800 bg-slate-950 rounded-lg">
+                    </div>
+
+                    <!-- Upload Sertifikat -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Sertifikat (PDF/Gambar)</label>
+                        <input type="file" id="sertifikatFile" accept=".pdf,image/*" required
+                            class="input-theme w-full text-xs text-slate-400 file:mr-2 file:py-2 file:px-3 file:rounded-lg file:border-0 file:font-semibold file:bg-blue-950 file:text-blue-300 hover:file:bg-blue-900 cursor:pointer border border-slate-800 bg-slate-950 rounded-lg">
+                    </div>
+                </div>
+
+                <!-- Tombol Kirim -->
+                <button type="submit" id="submitBtn"
+                    class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-lg transition duration-200 shadow-lg shadow-blue-900/50">
+                    Kirim Laporan
+                </button>
+            </form>
+
+            <!-- Pesan Status -->
+            <div id="statusMessage" class="mt-4 text-center text-sm font-medium hidden"></div>
+        </div>
+
+        <!-- KONTEN TAB 2: DAFTAR HASIL PELAPORAN & PAGINATION -->
+        <div id="tabDaftarContent" class="card-theme bg-slate-900 rounded-2xl shadow-2xl p-5 sm:p-8 border border-slate-800 hidden transition-colors duration-300">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                <div>
+                    <h2 class="text-xl font-bold text-white title-dyn">Daftar Hasil Pelaporan Peserta</h2>
+                    <p class="text-sm text-slate-400">Rekapitulasi data peserta yang telah mengirimkan laporan.</p>
+                </div>
+                <button onclick="loadData()" class="text-sm bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-lg transition font-medium border border-slate-700">Refresh Data</button>
+            </div>
+
+            <!-- Tabel Responsif di Semua Perangkat -->
+            <div class="overflow-x-auto rounded-lg border border-slate-800 table-border-dyn">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr id="tableHeaderRow" class="bg-slate-950 text-slate-400 text-xs uppercase tracking-wider border-b border-slate-800">
+                            <th class="py-3 px-4">Waktu</th>
+                            <th class="py-3 px-4">Nama Peserta</th>
+                            <th class="py-3 px-4">Asal Sekolah</th>
+                            <th class="py-3 px-4">Pesan & Kesan</th>
+                            <th class="py-3 px-4">Tindak Lanjut</th>
+                            <th class="py-3 px-4">Foto Profil</th>
+                            <th class="py-3 px-4">Foto Kegiatan</th>
+                            <th class="py-3 px-4">Sertifikat</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTableBody" class="text-sm text-slate-300 divide-y divide-slate-800/60 bg-slate-900/50">
+                        <tr>
+                            <td colspan="8" class="py-6 text-center text-slate-500">Memuat data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Kontrol Pagination -->
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6 pt-4 border-t border-slate-800 pagination-border-dyn">
+                <span id="pageInfo" class="text-sm text-slate-400">Halaman 1 dari 1</span>
+                <div class="space-x-2">
+                    <button id="prevBtn" onclick="changePage(-1)" disabled
+                        class="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg text-sm font-medium disabled:opacity-40 hover:bg-slate-700 transition border border-slate-700">
+                        Sebelumnya
+                    </button>
+                    <button id="nextBtn" onclick="changePage(1)" disabled
+                        class="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg text-sm font-medium disabled:opacity-40 hover:bg-slate-700 transition border border-slate-700">
+                        Selanjutnya
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxPPjRdPmIlFAnt3wNGdIAgv0knqqJuu153EbSgsoyejRk7cJp3-0KQQllJkM2_JcpS/exec'; //[cite: 5]
+
+        let allData = [];
+        let currentPage = 1;
+        const rowsPerPage = 5;
+
+        window.onload = function() {
+            const savedTheme = localStorage.getItem('ksrg_theme') || 'navy';
+            setTheme(savedTheme, false);
+            loadData();
+        };
+
+        // Fungsi Pengubah Tema Warna Dinamis
+        function setTheme(themeName, save = true) {
+            if (save) localStorage.setItem('ksrg_theme', themeName);
+            
+            const body = document.getElementById('pageBody');
+            const cards = document.querySelectorAll('.card-theme');
+            const inputs = document.querySelectorAll('.input-theme');
+            const badge = document.getElementById('badgeTheme');
+            const title = document.getElementById('titleText');
+            const tableHeader = document.getElementById('tableHeaderRow');
+            const nav = document.getElementById('navContainer');
+
+            body.className = "min-h-screen py-6 sm:py-10 px-3 sm:px-6 transition-colors duration-300";
+
+            if (themeName === 'navy') {
+                body.classList.add('bg-slate-900', 'text-slate-100');
+                cards.forEach(c => c.className = "card-theme bg-slate-900 rounded-2xl shadow-2xl p-5 sm:p-8 border border-slate-800 transition-colors duration-300");
+                inputs.forEach(i => i.className = "input-theme w-full px-4 py-3 rounded-lg bg-slate-950 border border-slate-800 text-white placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition");
+                badge.className = "bg-blue-900/60 text-blue-300 border border-blue-700/50 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider inline-block";
+                title.className = "text-2xl sm:text-3xl font-extrabold text-white tracking-tight";
+                tableHeader.className = "bg-slate-950 text-slate-400 text-xs uppercase tracking-wider border-b border-slate-800";
+                nav.className = "flex justify-center border-b border-slate-800 overflow-x-auto";
+            } else if (themeName === 'emerald') {
+                body.classList.add('bg-zinc-950', 'text-emerald-50');
+                cards.forEach(c => c.className = "card-theme bg-zinc-900 rounded-2xl shadow-2xl p-5 sm:p-8 border border-emerald-900/50 transition-colors duration-300");
+                inputs.forEach(i => i.className = "input-theme w-full px-4 py-3 rounded-lg bg-zinc-950 border border-emerald-900/50 text-white placeholder-zinc-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition");
+                badge.className = "bg-emerald-950 text-emerald-300 border border-emerald-700/50 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider inline-block";
+                title.className = "text-2xl sm:text-3xl font-extrabold text-emerald-400 tracking-tight";
+                tableHeader.className = "bg-zinc-950 text-emerald-400/70 text-xs uppercase tracking-wider border-b border-emerald-900/50";
+                nav.className = "flex justify-center border-b border-emerald-900/50 overflow-x-auto";
+            } else if (themeName === 'sunset') {
+                body.classList.add('bg-stone-950', 'text-stone-100');
+                cards.forEach(c => c.className = "card-theme bg-stone-900 rounded-2xl shadow-2xl p-5 sm:p-8 border border-purple-900/40 transition-colors duration-300");
+                inputs.forEach(i => i.className = "input-theme w-full px-4 py-3 rounded-lg bg-stone-950 border border-stone-800 text-white placeholder-stone-500 focus:ring-2 focus:ring-purple-500 focus:outline-none transition");
+                badge.className = "bg-purple-950 text-purple-300 border border-purple-700/50 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider inline-block";
+                title.className = "text-2xl sm:text-3xl font-extrabold text-pink-400 tracking-tight";
+                tableHeader.className = "bg-stone-950 text-stone-400 text-xs uppercase tracking-wider border-b border-stone-800";
+                nav.className = "flex justify-center border-b border-stone-800 overflow-x-auto";
+            } else if (themeName === 'light') {
+                body.classList.add('bg-slate-100', 'text-slate-800');
+                cards.forEach(c => c.className = "card-theme bg-white rounded-2xl shadow-xl p-5 sm:p-8 border border-slate-200 transition-colors duration-300");
+                inputs.forEach(i => i.className = "input-theme w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:outline-none transition");
+                badge.className = "bg-blue-100 text-blue-700 border border-blue-300 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider inline-block";
+                title.className = "text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight";
+                tableHeader.className = "bg-slate-100 text-slate-600 text-xs uppercase tracking-wider border-b border-slate-200";
+                nav.className = "flex justify-center border-b border-slate-200 overflow-x-auto";
+            }
+        }
+
+        function switchTab(tabName) {
+            const formContent = document.getElementById('tabFormContent');
+            const daftarContent = document.getElementById('tabDaftarContent');
+            const formBtn = document.getElementById('tabFormBtn');
+            const daftarBtn = document.getElementById('tabDaftarBtn');
+
+            if (tabName === 'form') {
+                formContent.classList.remove('hidden');
+                daftarContent.classList.add('hidden');
+                
+                formBtn.className = "py-3 px-4 sm:px-6 font-semibold text-sm border-b-2 border-blue-500 text-blue-400 transition flex items-center space-x-2 whitespace-nowrap";
+                daftarBtn.className = "py-3 px-4 sm:px-6 font-semibold text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition flex items-center space-x-2 whitespace-nowrap";
+            } else {
+                formContent.classList.add('hidden');
+                daftarContent.classList.remove('hidden');
+                
+                daftarBtn.className = "py-3 px-4 sm:px-6 font-semibold text-sm border-b-2 border-blue-500 text-blue-400 transition flex items-center space-x-2 whitespace-nowrap";
+                formBtn.className = "py-3 px-4 sm:px-6 font-semibold text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition flex items-center space-x-2 whitespace-nowrap";
+                
+                loadData();
+            }
+        }
+
+        async function loadData() {
+            try {
+                const response = await fetch(WEB_APP_URL);
+                const result = await response.json();
+                if (result.result === 'success') {
+                    allData = result.data;
+                    currentPage = 1;
+                    renderTable();
+                } else {
+                    console.error("Gagal memuat data");
+                }
+            } catch (error) {
+                console.error("Kesalahan jaringan:", error);
+            }
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('dataTableBody');
+            tbody.innerHTML = '';
+
+            if (allData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-slate-500">Belum ada data pelaporan.</td></tr>`;
+                document.getElementById('pageInfo').textContent = 'Halaman 0 dari 0';
+                document.getElementById('prevBtn').disabled = true;
+                document.getElementById('nextBtn').disabled = true;
+                return;
+            }
+
+            const totalPages = Math.ceil(allData.length / rowsPerPage);
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const paginatedData = allData.slice(start, end);
+
+            paginatedData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-800/40 transition';
+                
+                const formattedDate = new Date(row.timestamp).toLocaleString('id-ID', {
+                    dateStyle: 'medium', timeStyle: 'short'
+                });
+
+                tr.innerHTML = `
+                    <td class="py-3 px-4 text-xs text-slate-400">${formattedDate}</td>
+                    <td class="py-3 px-4 font-medium">${escapeHtml(row.nama)}</td>
+                    <td class="py-3 px-4">${escapeHtml(row.asalSekolah)}</td>
+                    <td class="py-3 px-4 text-xs max-w-xs truncate" title="${escapeHtml(row.pesanKesan)}">${escapeHtml(row.pesanKesan)}</td>
+                    <td class="py-3 px-4 text-xs max-w-xs truncate" title="${escapeHtml(row.tindakLanjut)}">${escapeHtml(row.tindakLanjut)}</td>
+                    <td class="py-3 px-4">
+                        ${row.fotoProfilUrl ? `<a href="${row.fotoProfilUrl}" target="_blank" class="text-indigo-300 hover:underline text-xs font-semibold bg-indigo-950/80 border border-indigo-800/50 px-2.5 py-1 rounded-md inline-block">Lihat Profil</a>` : '<span class="text-slate-600 text-xs">-</span>'}
+                    </td>
+                    <td class="py-3 px-4">
+                        ${row.fotoKegiatanUrl ? `<a href="${row.fotoKegiatanUrl}" target="_blank" class="text-blue-300 hover:underline text-xs font-semibold bg-blue-950/80 border border-blue-800/50 px-2.5 py-1 rounded-md inline-block">Lihat Foto</a>` : '<span class="text-slate-600 text-xs">-</span>'}
+                    </td>
+                    <td class="py-3 px-4">
+                        ${row.sertifikatUrl ? `<a href="${row.sertifikatUrl}" target="_blank" class="text-emerald-300 hover:underline text-xs font-semibold bg-emerald-950/80 border border-emerald-800/50 px-2.5 py-1 rounded-md inline-block">Lihat Sertifikat</a>` : '<span class="text-slate-600 text-xs">-</span>'}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('pageInfo').textContent = `Halaman ${currentPage} dari ${totalPages}`;
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
+        }
+
+        function changePage(direction) {
+            currentPage += direction;
+            renderTable();
+        }
+
+        function escapeHtml(text) {
+            return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        async function handleSubmit(event) {
+            event.preventDefault();
+            
+            const btn = document.getElementById('submitBtn');
+            const statusDiv = document.getElementById('statusMessage');
+            
+            btn.disabled = true;
+            btn.textContent = 'Mengirim data & mengupload file...';
+            statusDiv.className = 'mt-4 text-center text-sm font-medium text-blue-400';
+            statusDiv.textContent = 'Mohon tunggu, file Anda sedang diunggah...';
+            statusDiv.classList.remove('hidden');
+
+            try {
+                const nama = document.getElementById('nama').value;
+                const asalSekolah = document.getElementById('asalSekolah').value;
+                const pesanKesan = document.getElementById('pesanKesan').value;
+                const tindakLanjut = document.getElementById('tindakLanjut').value;
+                
+                const fotoProfilFile = document.getElementById('fotoProfilFile').files[0];
+                const fotoKegiatanFile = document.getElementById('fotoKegiatanFile').files[0];
+                const sertifikatFile = document.getElementById('sertifikatFile').files[0];
+
+                let fotoProfilBase64 = '', fotoProfilName = '';
+                if (fotoProfilFile) {
+                    fotoProfilBase64 = await fileToBase64(fotoProfilFile);
+                    fotoProfilName = fotoProfilFile.name;
+                }
+
+                let fotoKegiatanBase64 = '', fotoKegiatanName = '';
+                if (fotoKegiatanFile) {
+                    fotoKegiatanBase64 = await fileToBase64(fotoKegiatanFile);
+                    fotoKegiatanName = fotoKegiatanFile.name;
+                }
+
+                let sertifikatBase64 = '', sertifikatName = '';
+                if (sertifikatFile) {
+                    sertifikatBase64 = await fileToBase64(sertifikatFile);
+                    sertifikatName = sertifikatFile.name;
+                }
+
+                const payload = {
+                    nama: nama,
+                    asalSekolah: asalSekolah,
+                    pesanKesan: pesanKesan,
+                    tindakLanjut: tindakLanjut,
+                    fotoProfilBase64: fotoProfilBase64,
+                    fotoProfilName: fotoProfilName,
+                    fotoKegiatanBase64: fotoKegiatanBase64,
+                    fotoKegiatanName: fotoKegiatanName,
+                    sertifikatBase64: sertifikatBase64,
+                    sertifikatName: sertifikatName
+                };
+
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.result === 'success') {
+                    statusDiv.className = 'mt-4 text-center text-sm font-medium text-emerald-400';
+                    statusDiv.textContent = 'Laporan berhasil dikirim! Anda dapat melihatnya di tab Daftar Hasil Pelaporan.';
+                    document.getElementById('reportForm').reset();
+                    
+                    setTimeout(() => {
+                        switchTab('daftar');
+                    }, 1500);
+                } else {
+                    throw new Error(result.message);
+                }
+
+            } catch (error) {
+                statusDiv.className = 'mt-4 text-center text-sm font-medium text-red-400';
+                statusDiv.textContent = 'Terjadi kesalahan: ' + error.message;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Kirim Laporan';
+            }
+        }
+    </script>
+</body>
+</html>
